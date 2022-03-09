@@ -1,0 +1,62 @@
+﻿@page "/"
+
+<PageTitle>Todo List</PageTitle>
+
+<div class="row d-flex justify-content-center container">
+        <div class="col-md-8">
+            <div class="card-hover-shadow-2x mb-3 card">
+                <div class="card-header-tab card-header">
+                    <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i class="fa fa-tasks"></i>&nbsp;Task Lists (@Items.Count(count => !count.IsDone))</div>
+                </div>
+                <div class="scroll-area-sm">
+                    <perfect-scrollbar class="ps-show-limits">
+                        <div style="position: static;" class="ps ps--active-y">
+                            <div class="ps-content">
+                                <ul class=" list-group list-group-flush" id="ListItem">
+                                    @foreach(var item in Items)
+                                    {
+                                        if(!item.IsDone)
+                                        {
+                                            <li class="list-group-item">
+                                                <div class="todo-indicator bg-focus"></div>
+                                                <div class="widget-content p-0">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left mr-2">
+                                                            <div class="custom-checkbox custom-control"><input class="custom-control-input" id="exampleCustomCheckbox1" type="checkbox" @bind="item.IsDone"><label class="custom-control-label" for="exampleCustomCheckbox1">&nbsp;</label></div>
+                                                        </div>
+                                                        <div class="widget-content-left">
+                                                            <div class="widget-heading">@item.Title</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        }
+                                    }
+
+                                </ul>
+                            </div>
+                        </div>
+                    </perfect-scrollbar>
+                </div>
+                <div class="d-block text-right card-footer">
+                    <input class="form-control" id="Task" @bind="task" />
+                    <button class="mr-2 btn btn-link btn-sm">Cancel</button>
+                    <button class="btn btn-primary" id="Add" @onclick="AddTodo">Add Task</button>
+                </div>
+            </div>
+        </div>
+</div>
+
+@code {
+    List<TodoItem> Items = new();
+    string? task { get; set; }
+
+    void AddTodo()
+    {
+        if(!string.IsNullOrWhiteSpace(task))
+        {
+            Items.Add(new TodoItem { Title = task, IsDone = false});
+            task = string.Empty;
+        }
+    }
+}
